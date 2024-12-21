@@ -20,28 +20,6 @@ Dit project demonstreert een microservicesarchitectuur met drie hoofdservices en
 - Docker
 - MongoDB + MySQL
 
-## Structuur
-
-                 +---------------------------+
-                 |      API Gateway           |
-                 | (Spring Cloud Gateway)     |
-                 +---------------------------+
-                           |
-    +----------------------+----------------------+
-    |                      |                      |
-+------------+      +----------------+      +------------------+
-| Motorbike  |      |   Client       |      |   Reservation    |
-| Service    |      |   Service      |      |   Service        |
-| (Spring    |      | (Spring Boot)  |      | (Spring Boot)    |
-| Boot)      |      |                |      |                  |
-+------------+      +----------------+      +------------------+
-        |                    |                      |
-    +----------------+  +--------------+       +-----------------+
-    |    MySQL      |  |    MySQL     |       |    MongoDB      |
-    | (Motorbike    |  | (Client)     |       | (Reservation)   |
-    |  Database)    |  |  Database)   |       |  Database)      |
-    +----------------+  +--------------+       +-----------------+
-
 ## Aantoonbare Werking
 De werking van alle endpoints is getest via Postman en functioneert zoals verwacht.
 
@@ -78,12 +56,12 @@ JWT: Wordt gebruikt voor het verifiëren van verzoeken aan de microservices.
 
 ## Endpoints
 **Motorbike Service:**
-GET /motorbikes - Haal alle motorfietsen op.
-GET /motorbikes/{id} - Haal motorfiets op met specifiek ID.
-GET /motorbikes/filter - Filter op merk en/of model.
-POST /motorbikes - Voeg een nieuwe motorfiets toe.
-PUT /motorbikes/{id} - Werk een motorfiets bij.
-DELETE /motorbikes/{id} - Verwijder een motorfiets.
+- GET /motorbikes - Haal alle motorfietsen op.
+- GET /motorbikes/{id} - Haal motorfiets op met specifiek ID.
+- GET /motorbikes/filter - Filter op merk en/of model.
+- POST /motorbikes - Voeg een nieuwe motorfiets toe.
+- PUT /motorbikes/{id} - Werk een motorfiets bij.
+- DELETE /motorbikes/{id} - Verwijder een motorfiets.
 
 ![image](https://github.com/user-attachments/assets/d3b2ce47-7821-415a-bb4f-ab4d35bd4ca9)
 ![image](https://github.com/user-attachments/assets/169b6df9-b0f0-4fdd-b22f-8193d8319619)
@@ -93,12 +71,12 @@ DELETE /motorbikes/{id} - Verwijder een motorfiets.
 ![image](https://github.com/user-attachments/assets/25fbe7fc-eadb-4843-beb2-dd4fb3b8cf1f)
 
 **Client Service:**
-GET /clients - Haal alle klanten op.
-GET /clients/{id} - Haal klant op met specifiek ID.
-GET /clients/search - Zoek een klant op naam.
-POST /clients - Voeg een nieuwe klant toe.
-PUT /clients/{id} - Werk een klant bij.
-DELETE /clients/{id} - Verwijder een klant.
+- GET /clients - Haal alle klanten op.
+- GET /clients/{id} - Haal klant op met specifiek ID.
+- GET /clients/search - Zoek een klant op naam.
+- POST /clients - Voeg een nieuwe klant toe.
+- PUT /clients/{id} - Werk een klant bij.
+- DELETE /clients/{id} - Verwijder een klant.
 
 ![image](https://github.com/user-attachments/assets/95dcd6f9-392a-4e6a-a39b-c9562c0966cb)
 ![image](https://github.com/user-attachments/assets/2e07f6ab-2baa-4346-800b-76eb264e5e78)
@@ -108,12 +86,12 @@ DELETE /clients/{id} - Verwijder een klant.
 ![image](https://github.com/user-attachments/assets/46543291-3dfb-40f5-84e3-99bf99b6848c)
 
 **Reservation Service:**
-GET /reservations - Haal alle reserveringen op.
-GET /reservations/{id} - Haal reservering op met specifiek ID.
-GET /reservations/filter - Filter op naam van klant.
-POST /reservations - Voeg een nieuwe reservering toe.
-PUT /reservations/{id} - Werk een reservering bij.
-DELETE /reservations/{id} - Verwijder een reservering.
+- GET /reservations - Haal alle reserveringen op.
+- GET /reservations/{id} - Haal reservering op met specifiek ID.
+- GET /reservations/filter - Filter op naam van klant.
+- POST /reservations - Voeg een nieuwe reservering toe.
+- PUT /reservations/{id} - Werk een reservering bij.
+- DELETE /reservations/{id} - Verwijder een reservering.
 
 ![image](https://github.com/user-attachments/assets/4d6c67e4-060c-44f6-9bea-6c53ab3e9c84)
 ![image](https://github.com/user-attachments/assets/f1a17273-650c-4c8c-87a8-cce18c0f152a)
