@@ -5,8 +5,6 @@ services:
     build: ./motorbike-service
     ports:
       - "8080:8080"
-    links:
-      - motorbike-db
     environment:
       MYSQL_DB_USERNAME: root
       MYSQL_DB_PASSWORD: 1234
@@ -14,13 +12,13 @@ services:
       MYSQL_DB_PORT: 3306
     depends_on:
       - motorbike-db
+    networks:
+      - app-network
 
   client-service:
     build: ./client-service
     ports:
       - "8081:8081"
-    links:
-      - client-db
     environment:
       MYSQL_DB_USERNAME: root
       MYSQL_DB_PASSWORD: 1234
@@ -28,6 +26,8 @@ services:
       MYSQL_DB_PORT: 3306
     depends_on:
       - client-db
+    networks:
+      - app-network
 
   reservation-service:
     depends_on:
@@ -39,6 +39,8 @@ services:
     environment:
       MONGODB_PORT: 27017
       MONGODB_HOST: mongo-reservation
+    networks:
+      - app-network
 
   motorbike-db:
     image: mysql:latest
@@ -50,6 +52,8 @@ services:
       MYSQL_DATABASE: motorbikeDB
     volumes:
       - motorbike-data:/var/lib/mysql
+    networks:
+      - app-network
 
   client-db:
     image: mysql:latest
@@ -61,6 +65,8 @@ services:
       MYSQL_DATABASE: clientDB
     volumes:
       - client-data:/var/lib/mysql
+    networks:
+      - app-network
 
   mongo-reservation:
     image: mongo:latest
@@ -69,6 +75,8 @@ services:
       - "27017:27017"
     volumes:
       - reservation-data:/data/db
+    networks:
+      - app-network
 
   api-gateway:
     depends_on:
@@ -82,6 +90,12 @@ services:
       RESERVATION_SERVICE_BASEURL: "http://reservation-service:8082"
       CLIENT_SERVICE_BASEURL: "http://client-service:8081"
       MOTORBIKE_SERVICE_BASEURL: "http://motorbike-service:8080"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   motorbike-data:
