@@ -24,27 +24,19 @@ jobs:
 
       motorbike-db:
         image: mysql:latest
-        container_name: motorbike-db
         ports:
-          - "3307:3306"
-        environment:
+          - 3306:3306
+        env:
           MYSQL_ROOT_PASSWORD: 1234
           MYSQL_DATABASE: motorbikeDB
-        volumes:
-          - motorbike-data:/var/lib/mysql
-        options: --health-cmd='curl --silent --fail localhost:3306 || exit 1' --health-interval=30s --health-timeout=30s --health-retries=3
 
       client-db:
         image: mysql:latest
-        container_name: client-db
         ports:
-          - "3308:3306"
-        environment:
+          - 3306:3306
+        env:
           MYSQL_ROOT_PASSWORD: 1234
           MYSQL_DATABASE: clientDB
-        volumes:
-          - client-data:/var/lib/mysql
-        options: --health-cmd='curl --silent --fail localhost:3306 || exit 1' --health-interval=30s --health-timeout=30s --health-retries=3
 
     steps:
       - name: Checkout repository
@@ -53,20 +45,18 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build Docker images
+      - name: Build Docker image
         run: |
           docker build -t r0880734/motorbike-service ./motorbike-service
           docker build -t r0880734/reservation-service ./reservation-service
           docker build -t r0880734/client-service ./client-service
 
-      - name: Run services using Docker Compose
+      - name: Run services in Docker containers
         run: |
-          docker-compose -f docker-compose.yml up -d
-
-      - name: Wait for services to be ready
-        run: |
-          # Give services time to start up (adjust timing if necessary)
-          sleep 30
+          docker run -d --name motorbike-service r0880734/motorbike-service
+          docker run -d --name reservation-service r0880734/reservation-service
+          docker run -d --name client-service r0880734/client-service
+          docker ps  # Ensure containers are running
 
       - name: Run tests
         run: |
@@ -102,8 +92,3 @@ jobs:
       - name: Verify Deployment
         run: |
           ssh -i ${{ secrets.SERVER_SSH_KEY }} user@yourserver 'curl http://localhost:8080/motorbikes && curl http://localhost:8080/reservations && curl http://localhost:8080/clients'
-
-volumes:
-  motorbike-data:
-  reservation-data:
-  client-data:
