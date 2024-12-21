@@ -24,6 +24,16 @@ public class ClientController {
         return clientService.getClientById(id);
     }
 
+    @GetMapping("/search")
+    public List<Client> getClientsByName(@RequestParam String name) {
+        return clientService.getClientsByName(name);
+    }
+
+    @PutMapping("/{id}")
+    public Client updateClient(@PathVariable Long id, @RequestBody Client updatedClient) {
+        return clientService.updateClient(id, updatedClient);
+    }
+
     @PostMapping
     public Client createClient(@RequestBody Client client) {
         return clientService.createClient(client);

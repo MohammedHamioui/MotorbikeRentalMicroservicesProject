@@ -28,4 +28,22 @@ public class ClientService {
     public void deleteClient(Long id) {
         clientRepository.deleteById(id);
     }
+
+    public List<Client> getClientsByName(String name) {
+        return clientRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    public Client updateClient(Long id, Client updatedClient) {
+        Optional<Client> existingClient = clientRepository.findById(id);
+        if (existingClient.isPresent()) {
+            Client client = existingClient.get();
+            // Update fields with the new data from updatedClient
+            client.setName(updatedClient.getName());
+            client.setEmail(updatedClient.getEmail());
+            client.setPhoneNumber(updatedClient.getPhoneNumber());
+            return clientRepository.save(client);  // Save the updated client
+        } else {
+            return null;  // Return null if client is not found
+        }
+    }
 }
