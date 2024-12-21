@@ -41,24 +41,15 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build Docker image
+      - name: Build and start services using Docker Compose
         run: |
-          docker build -t r0880734/motorbike-service ./motorbike-service
-          docker build -t r0880734/reservation-service ./reservation-service
-          docker build -t r0880734/client-service ./client-service
-
-      - name: Run services in Docker containers
-        run: |
-          docker run -d --name motorbike-service r0880734/motorbike-service
-          docker run -d --name reservation-service r0880734/reservation-service
-          docker run -d --name client-service r0880734/client-service
-          docker ps  # Ensure containers are running
+          docker-compose -f docker-compose.yml up --build -d
 
       - name: Run tests
         run: |
-          docker exec motorbike-service ./mvnw test
-          docker exec reservation-service ./mvnw test
-          docker exec client-service ./mvnw test
+          docker-compose exec motorbike-service ./mvnw test
+          docker-compose exec reservation-service ./mvnw test
+          docker-compose exec client-service ./mvnw test
 
   deploy:
     runs-on: ubuntu-latest
@@ -75,9 +66,8 @@ jobs:
 
       - name: Push Docker images to Docker Hub
         run: |
-          docker push r0880734/motorbike-service
-          docker push r0880734/reservation-service
-          docker push r0880734/client-service
+          docker-compose -f docker-compose.yml build
+          docker-compose -f docker-compose.yml push
 
       - name: Deploy to Production Server
         run: |
