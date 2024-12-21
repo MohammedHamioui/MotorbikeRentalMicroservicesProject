@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  motorbike-service:
+    build: ./motorbike-service
+    ports:
+      - "8080:8080"
+    links:
+      - motorbike-db
+    environment:
+      MYSQL_DB_USERNAME: root
+      MYSQL_DB_PASSWORD: 1234
+      MYSQL_DB_HOST: motorbike-db
+      MYSQL_DB_PORT: 3306
+    depends_on:
+      - motorbike-db
+
+  client-service:
+    build: ./client-service
+    ports:
+      - "8081:8081"
+    links:
+      - client-db
+    environment:
+      MYSQL_DB_USERNAME: root
+      MYSQL_DB_PASSWORD: 1234
+      MYSQL_DB_HOST: client-db
+      MYSQL_DB_PORT: 3306
+    depends_on:
+      - client-db
+
+  reservation-service:
+    depends_on:
+      - mongo-reservation
+    build: ./reservation-service
+    container_name: reservation-service
+    ports:
+      - "8082:8082"
+    environment:
+      MONGODB_PORT: 27017
+      MONGODB_HOST: mongo-reservation
+
+  motorbike-db:
+    image: mysql:latest
+    container_name: motorbike-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: motorbikeDB
+    volumes:
+      - motorbike-data:/var/lib/mysql
+
+  client-db:
+    image: mysql:latest
+    container_name: client-db
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: clientDB
+    volumes:
+      - client-data:/var/lib/mysql
+
+  mongo-reservation:
+    image: mongo:latest
+    container_name: mongo-reservation
+    ports:
+      - "27017:27017"
+    volumes:
+      - reservation-data:/data/db
+
+  api-gateway:
+    depends_on:
+      - reservation-service
+      - client-service
+      - motorbike-service
+    build: ./api-gateway
+    ports:
+      - "8083:8083"
+    environment:
+      RESERVATION_SERVICE_BASEURL: "http://reservation-service:8082"
+      CLIENT_SERVICE_BASEURL: "http://client-service:8081"
+      MOTORBIKE_SERVICE_BASEURL: "http://motorbike-service:8080"
+
+volumes:
+  motorbike-data:
+  reservation-data:
+  client-data:
