@@ -33,4 +33,15 @@ public class ReservationController {
     public void deleteReservation(@PathVariable Long id) {
         reservationService.deleteReservation(id);
     }
+
+    @GetMapping("/filter")
+    public List<Reservation> getReservationsByClientName(@RequestParam String clientName) {
+        return reservationService.getReservationsByClientName(clientName);
+    }
+
+    // PUT endpoint to update a reservation
+    @PutMapping("/{id}")
+    public Reservation updateReservation(@PathVariable Long id, @RequestBody Reservation updatedReservation) {
+        return reservationService.updateReservation(id, updatedReservation);
+    }
 }

@@ -17,4 +17,7 @@ public class Reservation {
     private Long motorbikeId;
     private String startDate;
     private String endDate;
+
+    // Adding a name for filtering, assuming a Client model exists
+    private String clientName;  // Add the client name here (optional if stored in a separate collection)
 }

@@ -28,4 +28,31 @@ public class ReservationService {
     public void deleteReservation(Long id) {
         reservationRepository.deleteById(id);
     }
+
+    // Method to filter reservations by client name
+    public List<Reservation> getReservationsByClientName(String clientName) {
+        return reservationRepository.findByClientName(clientName);
+    }
+
+    // Method to update a reservation
+    public Reservation updateReservation(Long id, Reservation updatedReservation) {
+        Optional<Reservation> existingReservationOpt = reservationRepository.findById(id);
+
+        if (existingReservationOpt.isPresent()) {
+            Reservation existingReservation = existingReservationOpt.get();
+
+            // Update the fields
+            existingReservation.setClientId(updatedReservation.getClientId());
+            existingReservation.setMotorbikeId(updatedReservation.getMotorbikeId());
+            existingReservation.setStartDate(updatedReservation.getStartDate());
+            existingReservation.setEndDate(updatedReservation.getEndDate());
+            existingReservation.setClientName(updatedReservation.getClientName());
+
+            // Save the updated reservation
+            return reservationRepository.save(existingReservation);
+        } else {
+            // If the reservation does not exist, you can return null or throw an exception
+            return null;  // Or throw a custom exception to handle it properly
+        }
+    }
 }

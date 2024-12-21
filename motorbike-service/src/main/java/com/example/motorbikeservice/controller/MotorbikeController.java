@@ -33,4 +33,22 @@ public class MotorbikeController {
     public void deleteMotorbike(@PathVariable Long id) {
         motorbikeService.deleteMotorbike(id);
     }
+
+    // Endpoint to filter motorbikes by brand and/or model
+    @GetMapping("/filter")
+    public List<Motorbike> filterMotorbikes(@RequestParam(required = false) String brand,
+                                            @RequestParam(required = false) String model) {
+        return motorbikeService.filterMotorbikes(brand, model);
+    }
+
+    // Endpoint to update an existing motorbike
+    @PutMapping("/{id}")
+    public Motorbike updateMotorbike(@PathVariable Long id, @RequestBody Motorbike motorbike) {
+        Motorbike updatedMotorbike = motorbikeService.updateMotorbike(id, motorbike);
+        if (updatedMotorbike != null) {
+            return updatedMotorbike;
+        }
+        // Return a 404 error or throw an exception if the motorbike doesn't exist
+        return null;  // Or return a ResponseEntity with NOT_FOUND status
+    }
 }
